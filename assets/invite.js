@@ -51,6 +51,17 @@
   var FLOURISH = '<svg class="corner-flourish {POS}" viewBox="0 0 100 100" fill="none" stroke="#b5895a" stroke-width="1"><path d="M5 5 C 30 5, 20 40, 45 35 C 30 45, 15 60, 5 70"/><circle cx="30" cy="22" r="3"/><circle cx="12" cy="55" r="2.5"/></svg>';
   var DIVIDER = '<div class="divider fade-up"><span class="line"></span>' + HEART + '<span class="line"></span></div>';
 
+  /* ---------- logo H&N ----------
+     Hình lấy từ assets/logo.js — vector hoá từ ảnh logo gốc, không dùng <img>.
+     plain = true: chỉ hai chữ cái, dùng ở footer. */
+  function logoHTML(plain){
+    var L = window.HN_LOGO;
+    if(!L){ console.error('[thiepcuoi] thiếu assets/logo.js'); return ''; }
+    return '<div class="logo' + (plain ? ' logo--plain' : '') + '">' +
+             (plain ? L.mark : L.full) +
+           '</div>';
+  }
+
   /* ---------- tên khách mời từ ?ten= ---------- */
 
   function guestName(){
@@ -71,7 +82,7 @@
       FLOURISH.replace('{POS}','tl') + FLOURISH.replace('{POS}','tr') +
       '<div class="kicker fade-up in">' + esc(S.hero.kicker) + '</div>' +
       (g ? '<div class="guest-name fade-up in">' + esc(g) + '</div>' : '') +
-      '<div class="monogram-wrap fade-up in"><div class="monogram">' + esc(S.monogram) + '</div></div>' +
+      '<div class="logo-holder fade-up in">' + logoHTML(false) + '</div>' +
       '<div class="invite-line fade-up in">' + esc(S.hero.inviteLine) + '</div>' +
       '<h1 class="couple-names fade-up in">' + esc(S.hero.names[0]) +
         '<span class="amp">&amp;</span>' + esc(S.hero.names[1]) + '</h1>' +
@@ -253,7 +264,7 @@
 
     return '' +
     '<footer>' +
-      '<div class="monogram script fade-up">' + esc(S.footer.monogram) + '</div>' +
+      '<div class="logo-holder logo-holder--sm fade-up">' + logoHTML(true) + '</div>' +
       '<div class="thanks fade-up">' + esc(S.footer.thanks) + '</div>' +
       (links ? '<div class="side-switch fade-up">' + links + '</div>' : '') +
     '</footer>';

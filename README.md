@@ -57,6 +57,34 @@ Không có `?ten=` thì phần tên đơn giản là không hiện — link tr�
 
 Theo lệ thiệp cưới truyền thống: bên nào để tên con mình trước và ghi tên lễ của bên mình.
 
+## Logo
+
+Logo H&N **không dùng ảnh** — toàn bộ là `<path>` SVG, nằm trong [assets/logo.js](assets/logo.js).
+
+Được vector hoá trực tiếp từ `humiwedding_logo.png` bằng potrace, tách làm 3 lớp:
+
+| Lớp | Nội dung | Màu |
+|---|---|---|
+| `.hn-pale` | Phần nhạt: ruột cánh hoa, ruột lá | `#f2e6d2` |
+| `.hn-line` | Nét mảnh: vòng tròn, cành, viền lá, chữ WEDDING, trái tim | `#c8a576` |
+| *(không class)* | Hai chữ H–N, gồm cả nét sổ thư pháp lớn | gradient `hnGoldA` |
+
+Cách tách: nền và nét vàng phân biệt bằng **độ ấm màu R−B** (nền 5–11, nét vàng 65–103) chứ không phải độ sáng — dùng độ sáng sẽ khoét thủng chữ ở những vệt sáng kim loại. Sau đó dùng distance transform để tách nét dày (chữ) khỏi nét mảnh (vòng, lá).
+
+Hướng và các chặng màu của gradient được suy ra bằng hồi quy tuyến tính trên chính ảnh gốc, nên độ chuyển sáng-tối khớp với bản gốc.
+
+`window.HN_LOGO` có hai biến thể:
+- `full` — logo đầy đủ, dùng ở hero
+- `mark` — chỉ hai chữ cái, dùng ở footer
+
+Màu có `fill` sẵn trong SVG nên không phụ thuộc CSS, nhưng vẫn cho phép ghi đè qua `.logo .hn-line` / `.logo .hn-pale` trong `invite.css`.
+
+Chỉnh cỡ: sửa `width` của `.logo` (hero) và `.logo-holder--sm .logo` (footer) trong CSS.
+
+Logo là **nhãn hiệu cố định — luôn là HN trên cả 3 trang**. Quy ước để tên cô dâu trước ở bản nhà gái vẫn được áp dụng, nhưng ở phần tên đôi và thứ tự hai gia đình, không phải ở logo.
+
+Ảnh gốc `humiwedding_logo.png` nằm trong `_archive/`, chỉ để đối chiếu, không được xuất bản.
+
 ## RSVP
 
 Chưa bật. Mục xác nhận tham dự **tự ẩn** cho tới khi dán URL Apps Script vào cả 3 file — xem [apps-script/README.md](apps-script/README.md).

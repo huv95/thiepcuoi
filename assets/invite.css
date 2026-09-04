@@ -72,25 +72,15 @@ section{
   border-bottom:1px solid var(--line);
 }
 
-.monogram-wrap{
-  width:150px; height:150px; border-radius:50%;
-  border:1.5px solid var(--gold);
-  display:flex; align-items:center; justify-content:center;
-  position:relative;
-  margin-bottom:18px;
-}
-.monogram-wrap::before{
-  content:"";
-  position:absolute; inset:10px;
-  border:1px solid var(--gold);
-  border-radius:50%;
-  opacity:.5;
-}
-.monogram{
-  font-family:'Great Vibes', cursive;
-  font-size:52px;
-  color:var(--gold-deep);
-}
+/* --------- LOGO H & N (SVG vector hoá, xem assets/logo.js) --------- */
+.logo-holder{ display:flex; justify-content:center; margin-bottom:14px; }
+.logo{ width:min(330px, 80vw); }
+.logo-holder--sm .logo{ width:132px; }
+.logo .logo-svg{ display:block; width:100%; height:auto; }
+
+/* màu ăn theo bảng màu của site; riêng hai chữ cái giữ gradient mạ vàng trong SVG */
+.logo .hn-line{ fill:#c8a576; }
+.logo .hn-pale{ fill:#f2e6d2; }
 
 .kicker{
   letter-spacing:.35em;
@@ -367,7 +357,6 @@ footer{
   text-align:center; padding:60px 20px 50px;
   background:linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%);
 }
-footer .monogram{font-size:34px;}
 footer .thanks{margin-top:14px; font-size:15px; color:var(--ink-soft); letter-spacing:.04em;}
 footer .side-switch{
   margin-top:18px; font-size:14px; color:var(--ink-soft);
