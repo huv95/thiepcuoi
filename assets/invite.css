@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Great+Vibes&family=Marcellus&display=swap');
 
 :root{
-  --cream:#faf5ea;
-  --cream-2:#f3ead9;
-  --gold:#b5895a;
-  --gold-deep:#9c703c;
-  --ink:#4a3c2f;
-  --ink-soft:#7a6a58;
-  --line:#d8c39f;
+  /* Tông đỏ trầm. Nền là hai sắc đỏ, chữ là kem và vàng sáng.
+     Vàng đậm cũ (#9c703c) bỏ hẳn — trên nền đỏ chỉ đạt 2.7:1, đọc không ra.
+     Chữ kem trên nền đỏ trầm: 10.1:1. Vàng sáng trên nền đỏ trầm: 6.8:1. */
+  --cream:#6e1420;      /* nền chính (tên biến giữ nguyên cho khỏi phải sửa khắp nơi) */
+  --cream-2:#5a0f19;    /* nền trầm hơn, dùng cho trang 2 và 3 */
+  --gold:#e3c07f;       /* vàng sáng — viền, hoa văn */
+  --gold-deep:#e8cd93;  /* vàng sáng hơn — tiêu đề, số đếm ngược, nút */
+  --ink:#f7edda;        /* chữ chính */
+  --ink-soft:#e2c9b4;   /* chữ phụ */
+  --line:#a9744a;       /* đường kẻ */
 }
 
 *{box-sizing:border-box; margin:0; padding:0;}
@@ -28,7 +31,7 @@ body{
 a{color:inherit; text-decoration:none;}
 
 /* --------- decorative svg --------- */
-.corner-flourish{position:absolute; width:110px; height:110px; opacity:.55; pointer-events:none;}
+.corner-flourish{stroke:var(--gold); position:absolute; width:110px; height:110px; opacity:.55; pointer-events:none;}
 .corner-flourish.tl{top:14px; left:14px;}
 .corner-flourish.tr{top:14px; right:14px; transform:scaleX(-1);}
 .corner-flourish.bl{bottom:14px; left:14px; transform:scaleY(-1);}
@@ -98,7 +101,7 @@ section{
 .logo .logo-svg{ display:block; width:100%; height:auto; }
 
 /* màu ăn theo bảng màu của site; riêng hai chữ cái giữ gradient mạ vàng trong SVG */
-.logo .hn-line{ fill:#c8a576; }
+.logo .hn-line{ fill:#e3c07f; }
 .logo .hn-pale{ fill:#f2e6d2; }
 
 .kicker{
