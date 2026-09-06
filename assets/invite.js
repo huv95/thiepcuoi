@@ -112,13 +112,48 @@
     '</section>';
   }
 
+  /* Trang 2: dải ảnh cưới tự chuyển.
+     Chỉ ảnh đầu được tải ngay; các ảnh sau chờ tới lượt mới nạp (xem slideshow()).
+     Mỗi khung có sẵn nền là ảnh mờ 20px nhúng thẳng vào HTML nên không bị ô trống. */
   function photoHTML(){
-    if(!S.photo) return '';
+    var list = S.photos || (S.photo ? [S.photo] : []);
+    if(!list.length) return '';
+
+    var slides = list.map(function(p, i){
+      var img = i === 0
+        ? '<source type="image/webp" srcset="' + esc(p.src) + '.webp">' +
+          '<img src="' + esc(p.src) + '.jpg" alt="' + esc(p.alt || '') + '" fetchpriority="high" decoding="async">'
+        : '<source type="image/webp" data-srcset="' + esc(p.src) + '.webp">' +
+          '<img data-src="' + esc(p.src) + '.jpg" alt="' + esc(p.alt || '') + '" decoding="async">';
+
+      return '<div class="slide' + (i === 0 ? ' on' : '') + '"' +
+               (p.blur ? ' style="background-image:url(' + esc(p.blur) + ')"' : '') + '>' +
+               '<picture>' + img + '</picture>' +
+             '</div>';
+    }).join('');
+
+    var nav = '', dots = '';
+    if(list.length > 1){
+      nav = '<button type="button" class="nav prev" aria-label="Ảnh trước">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 4 L7 12 L15 20"/></svg>' +
+            '</button>' +
+            '<button type="button" class="nav next" aria-label="Ảnh sau">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 4 L17 12 L9 20"/></svg>' +
+            '</button>';
+
+      dots = '<div class="dots">' + list.map(function(p, i){
+        return '<button type="button" class="dot' + (i === 0 ? ' on' : '') +
+               '" data-slide="' + i + '" aria-label="Ảnh ' + (i+1) + '"></button>';
+      }).join('') + '</div>';
+    }
+
     return '' +
     '<section id="photo">' +
-      '<div class="kicker fade-up">' + esc(S.photo.kicker) + '</div>' +
-      '<div class="photo-frame fade-up"><img src="' + esc(S.photo.src) + '" alt="' + esc(S.photo.alt) + '" loading="lazy" width="1400" height="2100"></div>' +
-      '<div class="photo-caption fade-up">' + esc(S.photo.caption) + '</div>' +
+      '<div class="kicker fade-up">' + esc(S.photoKicker || 'Khoảnh khắc lứa đôi') + '</div>' +
+      '<div class="photo-frame fade-up">' + slides + nav + '</div>' +
+      dots +
+      (list.length > 1 ? '<div class="swipe-hint">Vuốt ngang để xem ảnh khác</div>' : '') +
+      (S.photoCaption ? '<div class="photo-caption fade-up">' + esc(S.photoCaption) + '</div>' : '') +
     '</section>';
   }
 
@@ -261,6 +296,81 @@
   }
   // lưới an toàn: màn hình rất cao hoặc IntersectionObserver bị chặn
   setTimeout(function(){ els.forEach(function(x){ x.classList.add('in'); }); }, 3500);
+
+  /* ---------- dải ảnh trang 2 ----------
+     Ảnh sau chỉ được nạp ngay trước lúc tới lượt (và nạp trước đúng một ảnh),
+     nên mở thiệp chỉ tốn một ảnh ~100KB thay vì cả bộ. */
+  (function slideshow(){
+    var frame = document.querySelector('#photo .photo-frame');
+    if(!frame) return;
+
+    var slides = [].slice.call(frame.querySelectorAll('.slide'));
+    var dots   = [].slice.call(document.querySelectorAll('#photo .dot'));
+    if(slides.length < 2) return;
+
+    var at = 0, timer;
+
+    function load(i){
+      var sl = slides[i];
+      if(!sl || sl.dataset.loaded) return;
+      sl.dataset.loaded = '1';
+      var src = sl.querySelector('source'), img = sl.querySelector('img');
+      if(src && src.dataset.srcset){ src.srcset = src.dataset.srcset; }
+      if(img && img.dataset.src){ img.src = img.dataset.src; }
+    }
+
+    function show(i){
+      i = (i + slides.length) % slides.length;
+      load(i);
+      load((i + 1) % slides.length);          // nạp sẵn ảnh kế tiếp
+      slides[at].classList.remove('on');
+      dots[at] && dots[at].classList.remove('on');
+      at = i;
+      slides[at].classList.add('on');
+      dots[at] && dots[at].classList.add('on');
+    }
+
+    function play(){
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      stop();
+      timer = setInterval(function(){ show(at + 1); }, 5000);
+    }
+    function stop(){ clearInterval(timer); }
+
+    slides[0].dataset.loaded = '1';
+    load(1);
+
+    dots.forEach(function(d){
+      d.addEventListener('click', function(){ show(Number(d.dataset.slide)); play(); });
+    });
+
+    var prev = frame.querySelector('.nav.prev'), next = frame.querySelector('.nav.next');
+    if(prev) prev.addEventListener('click', function(){ show(at - 1); play(); });
+    if(next) next.addEventListener('click', function(){ show(at + 1); play(); });
+
+    // bàn phím, cho ai xem trên máy tính
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowLeft'){ show(at - 1); play(); }
+      else if(e.key === 'ArrowRight'){ show(at + 1); play(); }
+    });
+
+    // vuốt ngang trên điện thoại
+    var x0 = null;
+    frame.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, {passive:true});
+    frame.addEventListener('touchend', function(e){
+      if(x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0;
+      if(Math.abs(dx) > 40){ show(at + (dx < 0 ? 1 : -1)); play(); }
+      x0 = null;
+    }, {passive:true});
+
+    // tab bị ẩn thì dừng, khỏi chạy vô ích
+    document.addEventListener('visibilitychange', function(){
+      document.hidden ? stop() : play();
+    });
+
+    play();
+  })();
 
   /* ---------- mỗi trang tự vừa một màn hình ----------
      Không đoán theo model máy: đo chiều cao thật của khung nhìn (đã trừ thanh

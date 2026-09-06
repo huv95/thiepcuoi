@@ -14,9 +14,9 @@
 <meta property="og:url" content="https://humiwedding.online/">
 <meta property="og:title" content="Lễ thành hôn · Phi Hùng &amp; Bích Ngọc">
 <meta property="og:description" content="11:00 · 01.10.2026 · Hà Nội — 11:00 · 15.10.2026 · Hạ Long. Trân trọng kính mời!">
-<meta property="og:image" content="https://humiwedding.online/assets/photo.jpg">
-<meta property="og:image:width" content="1400">
-<meta property="og:image:height" content="2100">
+<meta property="og:image" content="https://humiwedding.online/assets/anh/LDL01915.jpg">
+<meta property="og:image:width" content="900">
+<meta property="og:image:height" content="1350">
 <meta property="og:image:alt" content="Ảnh cưới Phi Hùng và Bích Ngọc">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#6e1420">
@@ -24,6 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="/assets/invite.css">
+<link rel="preload" as="image" href="/assets/anh/LDL01915.webp" type="image/webp" fetchpriority="high">
 </head>
 <body>
 
@@ -62,13 +63,27 @@ window.SITE = {
     ]
   },
 
-  /* TRANG 2 — ảnh cưới */
-  photo: {
-    kicker: 'Khoảnh khắc lứa đôi',
-    src: '/assets/photo.jpg',
-    alt: 'Ảnh cưới Phi Hùng và Bích Ngọc',
-    caption: 'Phi Hùng & Bích Ngọc'
-  },
+  /* TRANG 2 — dải ảnh cưới.
+     src không có đuôi: engine tự ghép .webp (chính) và .jpg (dự phòng).
+     blur là ảnh 20px nhúng sẵn, hiện ngay làm nền trong lúc ảnh thật đang tải.
+     Nén lại bằng: bash tools/build-anh.sh */
+  photos: [
+    { src: '/assets/anh/LDL01915', alt: 'Phi Hùng và Bích Ngọc trong áo dài cưới đỏ',
+      blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAeABQDAREAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAwQGBQH/xAApEAACAQQBAQYHAAAAAAAAAAABAgMABBEhEgUGEyIxQdFRYWJxgZHB/8QAGQEAAwEBAQAAAAAAAAAAAAAAAAECAwQF/8QAHREBAQACAgMBAAAAAAAAAAAAAQACERIhIjFBA//aAAwDAQACEQMRAD8AxABipvVuKqyS8CwHzpLqOn1akfZi6lQOksBU/UfajlZP6YjK2tp3llcXDKG4gKozgg586S1OXkBGtyJLy1kmZUjHgB8tjf59Klq0Y7CrI3ZUwSD9tUrlTughcstu8UbFVfbKDonPtVW7r5M9KgSeVpJjgxFSpzjZ/lJpXdSwMQmGbO9Y+FTS0naWnO7iilwUYZIB9MVpruXLxdROqolhcPBBy4FVbbbzujUGb7ZWPqM8a8Vdv3S1VzPt/9k=' },
+    { src: '/assets/anh/LDL01893', alt: 'Phi Hùng hôn tay Bích Ngọc, áo dài cưới đỏ',
+      blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAeABQDAREAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAABAIDBgX/xAAkEAACAgICAQQDAQAAAAAAAAABAgMRAAQSIWEFEzGRQUJi0f/EABcBAQEBAQAAAAAAAAAAAAAAAAECAAX/xAAcEQADAAIDAQAAAAAAAAAAAAAAARECIQMSMUH/2gAMAwEAAhEDEQA/AOGAKyTqkXIFecG4FVg/X9KTYiEiyFQf4Jw7EvTD6MaS7C+4AUFnif2NdDFjlZorinRI3j9pHZ/ywviPHnB7I08qaD07biOmgEqJx6pxf14yIOTrpntTk8qBXC0SRZqst+hk9MoVfb2CpNkEi1N/WYFFBWvqPMrOFBHLqusmm8DQsFayPgHK+hn4W6mo2zNLwcKU7+POMJyy6i9mB9NkjWUkleRoUL7/AMwhlyU//9k=' },
+    { src: '/assets/anh/LDL01461', alt: 'Phi Hùng và Bích Ngọc trước cổng hoa',
+      blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAeABQDAREAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAABAUGAgH/xAAlEAACAQMEAQQDAAAAAAAAAAABAgMABBEFEiExURMiMkFSccH/xAAWAQEBAQAAAAAAAAAAAAAAAAABAAL/xAAcEQEBAAICAwAAAAAAAAAAAAABABExAkESIVH/2gAMAwEAAhEDEQA/AH95I8dwoG/YfpezUMNi8WGT0Xhl9xG4LnO5fNJukiY7OFo1ZlOSBnmrNYsXLCUxtGwYd8eKy2il9V1O5t9Wt4IGIhG0ABfkCef3Sfa5NUx6hb+lGS+Mr0RSe7HkQOk+60Eu3G7rj6o4ndtzphNdtd0cV0qqXt23c/ie/wCGrlqDctjltggUyDjweqBEnCTe31GNQsRRgVUfHqkepx3cu9SgEbK8bsCuCMDmlSAafAUDrisW1v/Z' },
+    { src: '/assets/anh/LDL01323', alt: 'Bích Ngọc và Phi Hùng trong ảnh cưới',
+      blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAeABQDAREAAhEBAxEB/8QAGgAAAQUBAAAAAAAAAAAAAAAABQECAwQGB//EACcQAAECBgEDBAMAAAAAAAAAAAECAwAEBRESITEiQVETFTJhQnHB/8QAFwEBAQEBAAAAAAAAAAAAAAAAAQADAv/EABgRAQEBAQEAAAAAAAAAAAAAAAABERJB/9oADAMBAAIRAxEAPwAvKS60dTu8u9tw5gLOTjEs0VnJwBViGhkRbzbiK2Qyae3g4kLGwoAg/REKS5KS6lIPTjfj+w+AKqQ9tk3XmUjR1cclR7+eYxzbda9ZJitSqupcpaYGa0qxyGriwjSMx5Ksun8u48QoPr8o4/THUoBcxIVjfxzaOMdaxjU2qXSUAE7vzC5bunlCm/USDxbZhUXCdD9xJzquMJlKtMNJ+OWSfoHdoE//2Q==' },
+    { src: '/assets/anh/LDL01261', alt: 'Bích Ngọc trong váy cưới, Phi Hùng đứng bên',
+      blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAeABQDAREAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAgUDBAb/xAAkEAABAwMDBAMAAAAAAAAAAAABAgMRAAQSBSFRExQxYSJBcf/EABYBAQEBAAAAAAAAAAAAAAAAAAECAP/EABYRAQEBAAAAAAAAAAAAAAAAAAABEf/aAAwDAQACEQMRAD8A02nthttSR6pCjqKUl8NnIdRQTITkB+8UUyDLSfHmABPNUE1pdICnGyCF/W2xPE0My+tX9+blxWQaxbScUK2BmJHuamWVdlh1YXCuyZ7lR62IynzNWhcTZtpcDvyCoICctt/XNRii3VNGa1B5K1uLStAAxSPiRMmmRrdRN3/bJ6aZEHccVrE6bh/ITH1SQre8/sVmJrjBbpKgqfRoD//Z' },
+    { src: '/assets/anh/LDL01732', alt: 'Phi Hùng và Bích Ngọc trên nền trắng',
+      blur: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEBLAEsAAD/2wBDABQODxIPDRQSEBIXFRQYHjIhHhwcHj0sLiQySUBMS0dARkVQWnNiUFVtVkVGZIhlbXd7gYKBTmCNl4x9lnN+gXz/2wBDARUXFx4aHjshITt8U0ZTfHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHx8fHz/wAARCAAeABQDAREAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAABAUAAgEDBv/EACYQAAEEAQIEBwAAAAAAAAAAAAEAAgMRBBJBBRMhMRUyQ3GBkcH/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAXEQEBAQEAAAAAAAAAAAAAAAAAAREC/9oADAMBAAIRAxEAPwDoAAFpGuOSOUnlkuAAOquh+VNXKtSqLnsUUinfNjcaxoo3u0yHU5nXsTVewFkLHLXV2ni0yzsgByIB4rhz16cjCfoj9QF2gBx8mRsoieS7UAsyoZANoGr3F7LSoXNvyoP/2Q==' }
+  ],
+
+  photoKicker: 'Khoảnh khắc lứa đôi',
+  photoCaption: 'Phi Hùng & Bích Ngọc',
 
   /* TRANG 3 — đếm ngược, bản đồ, lời cảm ơn.
      Mỗi mục ở đây là một đồng hồ + nút bản đồ + nút thêm vào lịch.
