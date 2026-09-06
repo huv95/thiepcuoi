@@ -5,15 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Thiệp cưới | Phi Hùng &amp; Bích Ngọc</title>
-<meta name="description" content="Đám cưới Phi Hùng &amp; Bích Ngọc — Lễ Vu Quy 01/10/2026 tại Hà Nội và Lễ Thành Hôn 15/10/2026 tại Hạ Long. Trân trọng kính mời!">
+<meta name="description" content="Lễ thành hôn của Phi Hùng &amp; Bích Ngọc — 11:00 Thứ Năm 01/10/2026 tại Hà Nội và 11:00 Thứ Năm 15/10/2026 tại Hạ Long. Trân trọng kính mời!">
 <link rel="canonical" href="https://humiwedding.online/">
 
 <meta property="og:type" content="website">
 <meta property="og:locale" content="vi_VN">
 <meta property="og:site_name" content="Thiệp cưới Phi Hùng &amp; Bích Ngọc">
 <meta property="og:url" content="https://humiwedding.online/">
-<meta property="og:title" content="Thiệp cưới Phi Hùng &amp; Bích Ngọc">
-<meta property="og:description" content="Vu Quy 01/10/2026 · Hà Nội — Thành Hôn 15/10/2026 · Hạ Long. Trân trọng kính mời!">
+<meta property="og:title" content="Lễ thành hôn · Phi Hùng &amp; Bích Ngọc">
+<meta property="og:description" content="11:00 · 01.10.2026 · Hà Nội — 11:00 · 15.10.2026 · Hạ Long. Trân trọng kính mời!">
 <meta property="og:image" content="https://humiwedding.online/assets/photo.jpg">
 <meta property="og:image:width" content="1400">
 <meta property="og:image:height" content="2100">
@@ -32,31 +32,37 @@
 <noscript>
   <div class="ns">
     <h1 class="script" style="font-size:38px;color:#9c703c;">Phi Hùng &amp; Bích Ngọc</h1>
-    <p style="margin-top:14px;">Lễ Vu Quy · 01/10/2026 — Vạn Hoa Thiên Sơn Plaza, Số 89 Lê Đức Thọ, Từ Liêm, Hà Nội</p>
-    <p style="margin-top:10px;">Lễ Thành Hôn · 15/10/2026 — Hồ Cô Tiên Palace, Phố Đồng Hồ, Hạ Long, Quảng Ninh</p>
+    <p style="margin-top:14px;">Tiệc Hà Nội · 11 giờ 00, Thứ Năm 01/10/2026 — Vạn Hoa Thiên Sơn Plaza, Số 89 Lê Đức Thọ, Từ Liêm, Hà Nội</p>
+    <p style="margin-top:10px;">Tiệc Hạ Long · 11 giờ 00, Thứ Năm 15/10/2026 — Hồ Cô Tiên Palace, Phố Đồng Hồ, Hạ Long, Quảng Ninh</p>
   </div>
 </noscript>
 
 <script>
+/* Thiệp của cô dâu chú rể — lời mời do hai bạn tự đứng tên.
+   Toàn bộ thiệp gói trong 4 trang, xem assets/invite.js. */
 window.SITE = {
   side: 'chung',
 
+  /* TRANG 1 — lời mời, có đủ giờ, ngày, địa điểm ngay tại đây */
   hero: {
     kicker: 'Trân trọng kính mời',
-    inviteLine: 'Tới dự buổi tiệc thân mật mừng lễ thành hôn của hai con chúng tôi',
+    inviteLine: 'Tới dự lễ thành hôn của hai chúng tôi',
     names: ['Phi Hùng', 'Bích Ngọc'],
-    badges: [
-      'Vu Quy · Hà Nội · 01 . 10 . 2026',
-      'Thành Hôn · Hạ Long · 15 . 10 . 2026'
+    schedule: [
+      {
+        title: 'Tiệc mừng · Nhà gái · Hà Nội',
+        when:  '11:00 · Thứ Năm, ngày 01.10.2026',
+        where: 'Vạn Hoa Thiên Sơn Plaza — Số 89 Lê Đức Thọ, P. Từ Liêm, TP. Hà Nội'
+      },
+      {
+        title: 'Tiệc mừng · Nhà trai · Hạ Long',
+        when:  '11:00 · Thứ Năm, ngày 15.10.2026',
+        where: 'Hồ Cô Tiên Palace (Hội trường B) — Phố Đồng Hồ, Hạ Long, Quảng Ninh'
+      }
     ]
   },
 
-  intro: {
-    kicker: 'Save the date',
-    text: 'Hôn lễ là khởi đầu cho một hành trình mới, nơi hai trái tim hoà chung một nhịp đập. Sự hiện diện của quý khách là niềm vinh hạnh lớn lao đối với gia đình chúng tôi.',
-    namesLine: 'Vũ Phi Hùng & Vũ Thị Bích Ngọc'
-  },
-
+  /* TRANG 2 — ảnh cưới */
   photo: {
     kicker: 'Khoảnh khắc lứa đôi',
     src: '/assets/photo.jpg',
@@ -64,75 +70,57 @@ window.SITE = {
     caption: 'Phi Hùng & Bích Ngọc'
   },
 
+  /* TRANG 3 — đếm ngược, bản đồ, lời cảm ơn.
+     Mỗi mục ở đây là một đồng hồ + nút bản đồ + nút thêm vào lịch.
+     Ngày giờ, địa chỉ đầy đủ đã nằm ở hero.schedule (trang 1). */
   events: [
     {
-      kicker: 'Nhà gái · Hà Nội',
-      heading: 'Lễ Vu Quy & Tiệc mừng',
-      countdownLabel: 'tiệc nhà gái · 01.10',
-      items: [
-        { label: 'Lễ Vu Quy',  value: '08 giờ 00 phút, Thứ Năm, ngày 01/10/2026', sub: 'Tư gia nhà gái — Số nhà 34, ngõ 86 Nguyễn Văn Giáp, P. Từ Liêm, TP. Hà Nội' },
-        { label: 'Tiệc mừng',  value: '11 giờ 00 phút, Thứ Năm, ngày 01/10/2026', sub: '(Tức ngày 21 tháng 8 năm Bính Ngọ)' },
-        { label: 'Địa điểm',   value: 'Trung tâm tiệc cưới Vạn Hoa Thiên Sơn Plaza', sub: 'Số 89 Lê Đức Thọ, P. Từ Liêm, TP. Hà Nội' }
-      ],
+      kicker: 'Hà Nội · 01.10.2026',
+      heading: 'Tiệc mừng tại Hà Nội',
+      countdownLabel: 'tiệc Hà Nội · 01.10',
+      mapUrl: 'https://maps.app.goo.gl/5juD2o1he7TDBY489',
       mapQuery: 'Trung tâm tiệc cưới Vạn Hoa Thiên Sơn Plaza, Số 89 Lê Đức Thọ, Từ Liêm, Hà Nội',
       start: '2026-10-01T11:00:00+07:00',
       end:   '2026-10-01T15:00:00+07:00',
-      icsSummary: 'Tiệc cưới Bích Ngọc & Phi Hùng (nhà gái)',
+      icsSummary: 'Tiec cuoi Phi Hung & Bich Ngoc (Ha Noi)',
       icsDescription: 'Tiệc cưới tại Vạn Hoa Thiên Sơn Plaza, số 89 Lê Đức Thọ, Từ Liêm, Hà Nội',
-      icsFile: 'tiec-cuoi-nha-gai-01-10-2026'
+      icsFile: 'tiec-cuoi-ha-noi-01-10-2026'
     },
     {
-      kicker: 'Nhà trai · Hạ Long',
-      heading: 'Lễ Thành Hôn',
-      countdownLabel: 'tiệc nhà trai · 15.10',
-      items: [
-        { label: 'Thời gian', value: '11 giờ 00 phút, Thứ Năm, ngày 15/10/2026', sub: '(Tức ngày 06 tháng 9 năm Bính Ngọ)' },
-        { label: 'Địa điểm',  value: 'Hội trường B — Hồ Cô Tiên Palace',          sub: 'Phố Đồng Hồ, Hạ Long, Quảng Ninh' }
-      ],
+      kicker: 'Hạ Long · 15.10.2026',
+      heading: 'Tiệc mừng tại Hạ Long',
+      countdownLabel: 'tiệc Hạ Long · 15.10',
+      mapUrl: 'https://maps.app.goo.gl/s214mrcFyfya1vEB6',
       mapQuery: 'Hội trường B, Hồ Cô Tiên Palace, Phố Đồng Hồ, Hạ Long, Quảng Ninh',
       start: '2026-10-15T11:00:00+07:00',
       end:   '2026-10-15T15:00:00+07:00',
-      icsSummary: 'Lễ Thành Hôn Phi Hùng & Bích Ngọc (nhà trai)',
+      icsSummary: 'Tiec cuoi Phi Hung & Bich Ngoc (Ha Long)',
       icsDescription: 'Tiệc cưới tại Hồ Cô Tiên Palace, Phố Đồng Hồ, Hạ Long, Quảng Ninh',
-      icsFile: 'le-thanh-hon-nha-trai-15-10-2026'
+      icsFile: 'tiec-cuoi-ha-long-15-10-2026'
     }
   ],
 
-  calendar: {
-    year: 2026, month: 10, highlight: [1, 15],
-    legend: '01/10 · Hà Nội  —  15/10 · Hạ Long'
-  },
-
-  families: [
-    { title: 'Nhà Trai', parents: ['Bà: Phạm Thị Hiền'], child: 'Chú rể: Vũ Phi Hùng' },
-    { title: 'Nhà Gái',  parents: ['Ông: Vũ Đình Thao', 'Bà: Hoàng Thị Loan'], child: 'Cô dâu: Vũ Thị Bích Ngọc' }
-  ],
-
+  /* Mục xác nhận tham dự nằm cuối trang 3, tự ẩn khi chưa dán URL Apps Script. */
   rsvp: {
     url: 'PASTE_APPS_SCRIPT_URL_HERE',
     side: 'Chung',
     eventOptions: [
-      'Tiệc nhà gái · Hà Nội · 01/10',
-      'Tiệc nhà trai · Hạ Long · 15/10',
+      'Tiệc Hà Nội · 01/10',
+      'Tiệc Hạ Long · 15/10',
       'Cả hai tiệc'
     ],
     heading: 'Cho chúng mình biết nhé',
-    note: 'Hai bên tổ chức hai ngày khác nhau — bạn chọn giúp buổi tiệc sẽ tới dự nhé.'
+    note: 'Hai buổi tiệc ở hai ngày khác nhau — bạn chọn giúp buổi sẽ tới dự nhé.'
   },
 
   message: {
     big: 'Rất hân hạnh được đón tiếp!',
-    small: 'Sự hiện diện của quý khách là niềm vinh hạnh cho gia đình chúng tôi.'
+    small: 'Sự hiện diện của bạn là niềm vinh hạnh của hai chúng tôi.'
   },
 
   footer: {
     thanks: 'Phi Hùng & Bích Ngọc · 2026'
-  },
-
-  footerLinks: [
-    { text: 'Thiệp nhà trai', href: '/nhatrai/' },
-    { text: 'Thiệp nhà gái',  href: '/nhagai/' }
-  ]
+  }
 };
 </script>
 <script src="/assets/logo.js"></script>

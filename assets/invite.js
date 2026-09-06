@@ -1,5 +1,5 @@
-/* Thiệp cưới Phi Hùng & Bích Ngọc — engine dùng chung cho cả 3 trang.
-   Mỗi trang chỉ khai báo window.SITE rồi nạp file này.
+/* Thiệp cưới Phi Hùng & Bích Ngọc — engine của thiệp (4 trang cuộn dọc).
+   Trang HTML chỉ khai báo window.SITE rồi nạp file này.
    Không sửa nội dung ở đây — nội dung nằm trong window.SITE của từng trang. */
 (function(){
   'use strict';
@@ -77,29 +77,38 @@
 
   function heroHTML(){
     var g = guestName();
+    var h = S.hero;
+
+    /* Trang đầu phải đủ thông tin: mỗi mốc gồm tên lễ - giờ ngày - địa điểm.
+       hero.badges là dạng cũ, giữ lại cho mấy file trong _archive. */
+    var when = '';
+    if(h.schedule && h.schedule.length){
+      when = '<div class="hero-when fade-up in">' + h.schedule.map(function(x){
+        return '<div class="when-block">' +
+          (x.title ? '<div class="when-title">' + esc(x.title) + '</div>' : '') +
+          '<div class="when-time">' + esc(x.when) + '</div>' +
+          (x.where ? '<div class="when-where">' + esc(x.where) + '</div>' : '') +
+          (x.note  ? '<div class="when-note">'  + esc(x.note)  + '</div>' : '') +
+        '</div>';
+      }).join('') + '</div>';
+    } else if(h.badges){
+      when = h.badges.map(function(b){
+        return '<div class="date-badge fade-up in">' + esc(b) + '</div>';
+      }).join('');
+    }
+
     return '' +
     '<section id="hero">' +
-      FLOURISH.replace('{POS}','tl') + FLOURISH.replace('{POS}','tr') +
-      '<div class="kicker fade-up in">' + esc(S.hero.kicker) + '</div>' +
+      '<div class="kicker fade-up in">' + esc(h.kicker) + '</div>' +
       (g ? '<div class="guest-name fade-up in">' + esc(g) + '</div>' : '') +
       '<div class="logo-holder fade-up in">' + logoHTML(false) + '</div>' +
-      '<div class="invite-line fade-up in">' + esc(S.hero.inviteLine) + '</div>' +
-      '<h1 class="couple-names fade-up in">' + esc(S.hero.names[0]) +
-        '<span class="amp">&amp;</span>' + esc(S.hero.names[1]) + '</h1>' +
-      S.hero.badges.map(function(b){
-        return '<div class="date-badge fade-up in">' + esc(b) + '</div>';
-      }).join('') +
-      '<div class="scroll-cue">Cuộn xuống ↓</div>' +
-    '</section>';
-  }
-
-  function introHTML(){
-    return '' +
-    '<section id="intro">' +
-      '<div class="kicker fade-up">' + esc(S.intro.kicker) + '</div>' +
-      '<p class="fade-up">' + esc(S.intro.text) + '</p>' +
-      '<div class="names-line fade-up">' + esc(S.intro.namesLine) + '</div>' +
-      DIVIDER +
+      '<div class="invite-line fade-up in">' + esc(h.inviteLine) + '</div>' +
+      '<h1 class="couple-names fade-up in">' +
+        '<span class="nm">' + esc(h.names[0]) + '</span>' +
+        '<span class="amp">&amp;</span>' +
+        '<span class="nm">' + esc(h.names[1]) + '</span>' +
+      '</h1>' +
+      when +
     '</section>';
   }
 
@@ -113,94 +122,42 @@
     '</section>';
   }
 
+  /* Trang 3: mỗi buổi tiệc một đồng hồ đếm ngược, kèm nút bản đồ và thêm vào lịch. */
   function countdownHTML(){
-    return '' +
-    '<section id="countdown">' +
-      '<div class="kicker fade-up" id="cd-kicker">Đếm ngược tới ngày trọng đại</div>' +
-      '<div class="count-grid fade-up">' +
-        '<div class="count-box"><div class="count-num" id="cd-days">00</div><div class="count-label">Ngày</div></div>' +
-        '<div class="count-box"><div class="count-num" id="cd-hours">00</div><div class="count-label">Giờ</div></div>' +
-        '<div class="count-box"><div class="count-num" id="cd-mins">00</div><div class="count-label">Phút</div></div>' +
-        '<div class="count-box"><div class="count-num" id="cd-secs">00</div><div class="count-label">Giây</div></div>' +
-      '</div>' +
-    '</section>';
-  }
+    var dated = S.events.filter(function(e){ return e.start; });
+    if(!dated.length) return '';
 
-  function eventsHTML(){
-    var blocks = S.events.map(function(ev, i){
-      var items = ev.items.map(function(it){
-        return '<div class="event-item fade-up">' +
-          '<div class="label">' + esc(it.label) + '</div>' +
-          '<div class="value">' + esc(it.value) + '</div>' +
-          (it.sub ? '<div class="sub">' + esc(it.sub) + '</div>' : '') +
-        '</div>';
-      }).join('');
+    var groups = dated.map(function(ev){
+      var i = S.events.indexOf(ev);
+      var box = function(unit, label){
+        return '<div class="count-box"><div class="count-num" id="cd-' + i + '-' + unit + '">00</div>' +
+               '<div class="count-label">' + label + '</div></div>';
+      };
+
+      /* mapUrl: link Google Maps ghim sẵn (ưu tiên).
+         mapQuery: chỉ còn dùng để tìm đường khi chưa có link, và làm LOCATION trong .ics. */
+      var mapHref = ev.mapUrl ||
+        (ev.mapQuery ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(ev.mapQuery) : '');
 
       var buttons = '';
-      if(ev.mapQuery){
-        buttons += '<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=' +
-                   encodeURIComponent(ev.mapQuery) + '">Xem bản đồ</a>';
+      if(mapHref){
+        buttons += '<a class="btn" target="_blank" rel="noopener" href="' + esc(mapHref) + '">Xem bản đồ</a>';
       }
-      if(ev.start){
-        buttons += '<button class="btn" type="button" data-ics="' + i + '">Thêm vào lịch</button>';
-      }
+      buttons += '<button class="btn" type="button" data-ics="' + i + '">Thêm vào lịch</button>';
 
-      return '<div class="event-block">' +
-        '<div class="kicker fade-up">' + esc(ev.kicker) + '</div>' +
-        '<h2 class="script section-title fade-up">' + esc(ev.heading) + '</h2>' +
-        '<div class="event-card">' + items + '</div>' +
-        (buttons ? '<div class="btn-row fade-up">' + buttons + '</div>' : '') +
-      '</div>';
-    }).join('');
-
-    return '<section id="events">' + blocks + '</section>';
-  }
-
-  function calendarHTML(){
-    var c = S.calendar;
-    if(!c) return '';
-    var first = new Date(Date.UTC(c.year, c.month - 1, 1));
-    var daysInMonth = new Date(Date.UTC(c.year, c.month, 0)).getUTCDate();
-    var lead = (first.getUTCDay() + 6) % 7;   // lịch bắt đầu từ Thứ Hai
-    var hl = c.highlight || [];
-
-    var cells = [];
-    for(var i = 0; i < lead; i++) cells.push('<td></td>');
-    for(var d = 1; d <= daysInMonth; d++){
-      cells.push(hl.indexOf(d) > -1
-        ? '<td class="hl"><span class="day-circle">' + pad(d) + '</span></td>'
-        : '<td>' + pad(d) + '</td>');
-    }
-    while(cells.length % 7) cells.push('<td></td>');
-
-    var rows = '';
-    for(var r = 0; r < cells.length; r += 7){
-      rows += '<tr>' + cells.slice(r, r + 7).join('') + '</tr>';
-    }
-
-    return '' +
-    '<section id="calendar"><div class="cal-wrap fade-up">' +
-      '<div class="cal-title">Tháng ' + c.month + ' · ' + c.year + '</div>' +
-      '<table class="cal"><thead><tr><th>T2</th><th>T3</th><th>T4</th><th>T5</th><th>T6</th><th>T7</th><th>CN</th></tr></thead>' +
-      '<tbody>' + rows + '</tbody></table>' +
-      (c.legend ? '<div class="cal-legend">' + esc(c.legend) + '</div>' : '') +
-    '</div></section>';
-  }
-
-  function familiesHTML(){
-    var cards = S.families.map(function(f){
-      return '<div class="fam-card fade-up">' +
-        '<h3>' + esc(f.title) + '</h3>' +
-        f.parents.map(function(p){ return '<p>' + esc(p) + '</p>'; }).join('') +
-        '<div class="role">' + esc(f.child) + '</div>' +
+      return '<div class="count-group fade-up">' +
+        '<div class="count-title">' + esc(ev.countdownLabel || ev.kicker) + '</div>' +
+        '<div class="count-grid">' +
+          box('days','Ngày') + box('hours','Giờ') + box('mins','Phút') + box('secs','Giây') +
+        '</div>' +
+        '<div class="btn-row">' + buttons + '</div>' +
       '</div>';
     }).join('');
 
     return '' +
-    '<section id="families">' +
-      '<div class="kicker fade-up">Đôi lời</div>' +
-      '<h2 class="script section-title fade-up">Hai gia đình</h2>' +
-      '<div class="fam-grid">' + cards + '</div>' +
+    '<section id="countdown">' +
+      '<div class="kicker fade-up">Đếm ngược tới ngày trọng đại</div>' +
+      '<div class="count-groups">' + groups + '</div>' +
     '</section>';
   }
 
@@ -272,11 +229,25 @@
 
   /* ---------- render ---------- */
 
+  /* Thiệp gói trong đúng 3 trang, mỗi trang vừa đúng một màn hình:
+       1 · lời mời + đủ ngày giờ địa điểm
+       2 · ảnh cưới
+       3 · đếm ngược, bản đồ, lời cảm ơn
+     Mỗi trang có một .page-inner để đo chiều cao và co lại cho vừa (xem fitPages). */
+  function page(n, html, chrome){
+    return '<div class="page page--' + n + '">' +
+             '<div class="page-inner">' + html + '</div>' +
+             (chrome || '') +
+           '</div>';
+  }
+
   var root = document.getElementById('app') || document.body;
   root.insertAdjacentHTML('beforeend', [
-    heroHTML(), introHTML(), photoHTML(), countdownHTML(),
-    eventsHTML(), calendarHTML(), familiesHTML(), rsvpHTML(),
-    messageHTML(), footerHTML()
+    page(1, heroHTML(),
+      FLOURISH.replace('{POS}','tl') + FLOURISH.replace('{POS}','tr') +
+      '<div class="scroll-cue">Cuộn xuống ↓</div>'),
+    page(2, photoHTML()),
+    page(3, countdownHTML() + rsvpHTML() + messageHTML() + footerHTML())
   ].join(''));
 
   /* ---------- hiệu ứng fade-up ---------- */
@@ -291,32 +262,78 @@
   // lưới an toàn: màn hình rất cao hoặc IntersectionObserver bị chặn
   setTimeout(function(){ els.forEach(function(x){ x.classList.add('in'); }); }, 3500);
 
+  /* ---------- mỗi trang tự vừa một màn hình ----------
+     Không đoán theo model máy: đo chiều cao thật của khung nhìn (đã trừ thanh
+     công cụ trình duyệt) rồi thu nội dung từng trang lại đúng bằng tỉ lệ còn
+     thiếu. Trang nào vừa sẵn thì không đụng gì. Sàn 0.62 để chữ không bé quá. */
+  (function fitPages(){
+    var MIN = 0.62;
+    var pages = [].slice.call(document.querySelectorAll('.page'));
+    if(!pages.length) return;
+
+    function fit(pg){
+      var inner = pg.querySelector('.page-inner');
+      if(!inner) return;
+
+      inner.style.zoom = '';               // đo lại từ cỡ gốc
+      var style   = getComputedStyle(pg);
+      var padding = parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
+      var cue     = pg.querySelector('.scroll-cue');
+      var reserve = cue && getComputedStyle(cue).display !== 'none' ? 34 : 0;
+      var avail   = (window.visualViewport ? window.visualViewport.height : window.innerHeight)
+                    - padding - reserve;
+      var content = inner.scrollHeight;
+      if(!avail || !content) return;
+
+      var k = avail / content;
+      if(k >= 1) return;                   // đã vừa, để nguyên
+      inner.style.zoom = Math.max(MIN, k).toFixed(3);
+    }
+
+    function apply(){ pages.forEach(fit); }
+
+    var pending;
+    function schedule(){
+      clearTimeout(pending);
+      pending = setTimeout(apply, 120);
+    }
+
+    apply();
+    // font chữ và ảnh cưới tải xong thì chiều cao đổi -> đo lại
+    if(document.fonts && document.fonts.ready) document.fonts.ready.then(apply);
+    window.addEventListener('load', apply);
+    window.addEventListener('resize', schedule);
+    window.addEventListener('orientationchange', schedule);
+  })();
+
   /* ---------- đếm ngược ---------- */
 
   (function countdown(){
-    var dated = S.events.filter(function(e){ return e.start; });
-    if(!dated.length) return;
-
-    var now = Date.now();
-    var upcoming = dated
-      .map(function(e){ return {ev:e, t:new Date(e.start).getTime()}; })
-      .sort(function(a,b){ return a.t - b.t; });
-    var next = upcoming.filter(function(x){ return x.t > now; })[0] || upcoming[upcoming.length-1];
-
-    if(dated.length > 1){
-      document.getElementById('cd-kicker').textContent = 'Đếm ngược tới ' + (next.ev.countdownLabel || next.ev.kicker);
-    }
-
-    var d = document.getElementById('cd-days'), h = document.getElementById('cd-hours'),
-        m = document.getElementById('cd-mins'), s = document.getElementById('cd-secs');
+    var clocks = [];
+    S.events.forEach(function(ev, i){
+      if(!ev.start) return;
+      var d = document.getElementById('cd-' + i + '-days');
+      if(!d) return;
+      clocks.push({
+        t: new Date(ev.start).getTime(),
+        days: d,
+        hours: document.getElementById('cd-' + i + '-hours'),
+        mins:  document.getElementById('cd-' + i + '-mins'),
+        secs:  document.getElementById('cd-' + i + '-secs')
+      });
+    });
+    if(!clocks.length) return;
 
     function tick(){
-      var diff = next.t - Date.now();
-      if(diff < 0) diff = 0;
-      d.textContent = pad(Math.floor(diff/86400000));
-      h.textContent = pad(Math.floor(diff/3600000) % 24);
-      m.textContent = pad(Math.floor(diff/60000) % 60);
-      s.textContent = pad(Math.floor(diff/1000) % 60);
+      var now = Date.now();
+      clocks.forEach(function(c){
+        var diff = c.t - now;
+        if(diff < 0) diff = 0;
+        c.days.textContent  = pad(Math.floor(diff/86400000));
+        c.hours.textContent = pad(Math.floor(diff/3600000) % 24);
+        c.mins.textContent  = pad(Math.floor(diff/60000) % 60);
+        c.secs.textContent  = pad(Math.floor(diff/1000) % 60);
+      });
     }
     tick();
     setInterval(tick, 1000);

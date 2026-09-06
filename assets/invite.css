@@ -42,11 +42,29 @@ a{color:inherit; text-decoration:none;}
 .divider .line{flex:1; height:1px; background:linear-gradient(90deg, transparent, var(--line), transparent);}
 .divider svg{width:22px; height:22px;}
 
+/* --------- 3 TRANG --------- 
+   Mỗi .page cao đúng một màn hình, cuộn dọc lần lượt 1 → 3.
+   Nội dung nằm trong .page-inner để JS đo và co cho vừa (xem fitPages). */
+.page{
+  position:relative;
+  min-height:100svh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:clamp(28px, 6vh, 60px) 0;
+}
+.page--1{padding:0;}
+.page--3{padding-bottom:0;}
+.page + .page{border-top:1px solid var(--line);}
+.page--2{background:linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%);}
+.page--3{background:var(--cream-2);}
+
+.page-inner{width:100%;}
+
 section{
   position:relative;
-  padding:70px 20px;
+  padding:34px 20px;
   max-width:900px;
   margin:0 auto;
+  width:100%;
 }
 
 .fade-up{
@@ -61,15 +79,16 @@ section{
 
 /* --------- HERO --------- */
 #hero{
-  min-height:100svh;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  max-width:640px;
+  display:flex; flex-direction:column; align-items:center;
   text-align:center;
   padding:40px 20px;
-  position:relative;
+  background:transparent;
+}
+.page--1{
   background:
     radial-gradient(circle at 50% 18%, rgba(181,137,90,.10), transparent 55%),
     linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%);
-  border-bottom:1px solid var(--line);
 }
 
 /* --------- LOGO H & N (SVG vector hoá, xem assets/logo.js) --------- */
@@ -112,18 +131,26 @@ section{
 
 .couple-names{
   font-family:'Great Vibes', cursive;
-  font-size:clamp(46px, 9vw, 76px);
+  font-size:clamp(40px, 8.4vw, 76px);
   color:var(--gold-deep);
   line-height:1.25;
   margin:10px 0;
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:center;
+  max-width:100%;
 }
+/* mỗi tên là một khối liền — không bao giờ bị ngắt giữa chừng */
+.couple-names .nm{white-space:nowrap;}
 .amp{
   display:inline-flex; align-items:center; justify-content:center;
   margin:2px 14px;
   color:var(--gold);
   font-family:'Cormorant Garamond', serif;
   font-size:.55em;
-  vertical-align:middle;
+}
+/* điện thoại: xếp tên / & / tên thành ba dòng cho gọn */
+@media(max-width:560px){
+  .couple-names{flex-direction:column;}
+  .amp{margin:0;}
 }
 
 .date-badge{
@@ -147,24 +174,37 @@ section{
 }
 @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
 
-/* --------- INTRO --------- */
-#intro{text-align:center;}
-#intro .kicker{margin-bottom:14px;}
-#intro p{
-  font-size:clamp(17px,2.4vw,20px);
-  color:var(--ink);
-  max-width:620px; margin:0 auto;
+/* thông tin ngày giờ ngay trang đầu */
+.hero-when{
+  margin-top:26px;
+  display:grid; gap:16px;
+  width:min(560px, 100%);
 }
-#intro .names-line{
-  margin-top:22px; font-family:'Marcellus', serif;
-  font-size:clamp(22px,3vw,28px); color:var(--gold-deep); letter-spacing:.03em;
+.when-block{
+  padding:14px 12px;
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
 }
+.when-title{
+  font-family:'Marcellus', serif;
+  letter-spacing:.2em; text-transform:uppercase;
+  font-size:12px; color:var(--gold-deep);
+  margin-bottom:7px;
+}
+.when-time{
+  font-family:'Marcellus', serif;
+  font-size:clamp(18px, 3.6vw, 23px);
+  letter-spacing:.08em; color:var(--ink);
+}
+.when-where{font-size:15px; color:var(--ink-soft); margin-top:6px;}
+.when-note{font-size:13.5px; color:var(--ink-soft); font-style:italic; margin-top:3px;}
 
 /* --------- PHOTO --------- */
 #photo{text-align:center;}
 .photo-frame{
   position:relative;
-  max-width:420px; margin:26px auto 0;
+  max-width:min(420px, 62vh);
+  margin:20px auto 0;
   padding:14px;
   border:1px solid var(--gold);
 }
@@ -188,12 +228,24 @@ section{
 
 /* --------- COUNTDOWN --------- */
 #countdown{text-align:center;}
+.count-groups{
+  display:grid; gap:26px;
+  margin-top:20px;
+}
+@media(min-width:760px){
+  .count-groups{grid-template-columns:1fr 1fr; gap:34px;}
+}
+.count-title{
+  font-family:'Marcellus', serif;
+  letter-spacing:.18em; text-transform:uppercase;
+  font-size:12.5px; color:var(--gold-deep);
+}
 .count-grid{
-  display:flex; gap:clamp(10px,3vw,28px); justify-content:center; flex-wrap:wrap;
-  margin-top:28px;
+  display:flex; gap:clamp(8px,2.4vw,18px); justify-content:center; flex-wrap:wrap;
+  margin-top:14px;
 }
 .count-box{
-  min-width:82px;
+  min-width:74px;
   background:var(--cream);
   border:1px solid var(--line);
   border-radius:6px;
@@ -201,7 +253,7 @@ section{
 }
 .count-num{
   font-family:'Marcellus', serif;
-  font-size:clamp(28px,5vw,40px);
+  font-size:clamp(26px,4.4vw,36px);
   color:var(--gold-deep);
 }
 .count-label{
@@ -209,32 +261,9 @@ section{
   margin-top:4px;
 }
 
-/* --------- EVENT DETAILS --------- */
-#events{
-  background:var(--cream-2);
-  border-top:1px solid var(--line);
-  border-bottom:1px solid var(--line);
-}
-.event-block + .event-block{
-  margin-top:54px; padding-top:44px;
-  border-top:1px solid var(--line);
-}
-.event-card{
-  display:grid; gap:26px;
-  grid-template-columns:1fr;
-  text-align:center;
-  max-width:560px; margin:32px auto 0;
-}
-.event-item{padding:6px 10px;}
-.event-item .label{
-  font-family:'Marcellus', serif; letter-spacing:.15em; text-transform:uppercase;
-  font-size:12.5px; color:var(--gold-deep); margin-bottom:6px;
-}
-.event-item .value{font-size:clamp(18px,2.6vw,22px); color:var(--ink);}
-.event-item .sub{font-size:14.5px; color:var(--ink-soft); font-style:italic; margin-top:2px;}
-
+/* --------- NÚT --------- */
 .btn{
-  display:inline-block; margin-top:26px;
+  display:inline-block; margin-top:16px;
   padding:12px 32px;
   border:1px solid var(--gold-deep);
   color:var(--gold-deep);
@@ -250,55 +279,7 @@ section{
 .btn:hover{background:var(--gold-deep); color:var(--cream);}
 .btn:disabled{opacity:.5; cursor:default;}
 .btn:disabled:hover{background:transparent; color:var(--gold-deep);}
-.btn-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:10px;}
-
-/* --------- CALENDAR --------- */
-#calendar{text-align:center;}
-.cal-wrap{
-  max-width:380px; margin:30px auto 0;
-  border:1px solid var(--line);
-  padding:22px 18px 26px;
-  border-radius:8px;
-  background:var(--cream);
-}
-.cal-title{font-family:'Marcellus', serif; letter-spacing:.1em; color:var(--gold-deep); margin-bottom:14px; font-size:15px; text-transform:uppercase;}
-table.cal{width:100%; border-collapse:collapse;}
-table.cal th{
-  font-family:'Marcellus', serif; font-size:12px; color:var(--ink-soft);
-  padding-bottom:8px; font-weight:400;
-}
-table.cal td{
-  font-size:15px; padding:7px 0; color:var(--ink); position:relative;
-}
-table.cal td.hl{color:var(--cream);}
-table.cal td.hl .day-circle{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:30px; height:30px; border-radius:50%;
-  background:var(--gold-deep); color:var(--cream);
-  font-weight:600;
-}
-.cal-legend{
-  margin-top:14px; font-size:13.5px; color:var(--ink-soft); font-style:italic;
-}
-
-/* --------- FAMILIES --------- */
-#families{background:var(--cream-2); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
-.fam-grid{
-  display:grid; grid-template-columns:1fr; gap:36px;
-  margin-top:20px;
-}
-@media(min-width:640px){
-  .fam-grid{grid-template-columns:1fr 1fr;}
-}
-.fam-card{text-align:center; padding:20px;}
-.fam-card h3{
-  font-family:'Marcellus', serif; letter-spacing:.15em; text-transform:uppercase;
-  color:var(--gold-deep); font-size:16px; margin-bottom:14px;
-}
-.fam-card p{font-size:17px; margin:3px 0;}
-.fam-card .role{
-  margin-top:12px; font-style:italic; color:var(--gold-deep); font-size:16px;
-}
+.btn-row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:4px;}
 
 /* --------- RSVP --------- */
 #rsvp{text-align:center;}
@@ -354,8 +335,7 @@ table.cal td.hl .day-circle{
 
 /* --------- FOOTER --------- */
 footer{
-  text-align:center; padding:60px 20px 50px;
-  background:linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%);
+  text-align:center; padding:30px 20px 46px;
 }
 footer .thanks{margin-top:14px; font-size:15px; color:var(--ink-soft); letter-spacing:.04em;}
 footer .side-switch{
@@ -370,7 +350,43 @@ noscript .ns{
   border:1px solid var(--line); background:var(--cream-2);
 }
 
+/* --------- TRANG 1 TRÊN ĐIỆN THOẠI ---------
+   Mốc chuẩn: iPhone 15 (393 x 852, vùng thấy được ~700px sau thanh Safari).
+   Logo thu nhỏ và các khoảng cách bóp lại để khối tiệc Hạ Long vẫn nằm trọn
+   trong màn hình đầu tiên, không phải cuộn mới thấy. */
+@media(max-width:700px){
+  #hero{padding:20px 18px;}
+  .logo{width:min(172px, 44vw);}
+  .logo-holder{margin-bottom:8px;}
+  .kicker{font-size:12px; margin-bottom:4px;}
+  .guest-name{font-size:24px; margin:0;}
+  .invite-line{font-size:14px; margin:10px 0 2px;}
+  .couple-names{font-size:clamp(32px, 8vw, 40px); line-height:1.12; margin:4px 0;}
+  .hero-when{margin-top:14px; gap:10px; width:100%;}
+  .when-block{padding:9px 8px;}
+  .when-title{font-size:11px; letter-spacing:.16em; margin-bottom:4px;}
+  .when-time{font-size:17px;}
+  .when-where{font-size:13px; line-height:1.45; margin-top:4px;}
+  .scroll-cue{bottom:8px; font-size:10px;}
+
+  .count-box{min-width:66px; padding:12px 8px;}
+  .btn{padding:10px 22px; font-size:12.5px; margin-top:12px;}
+  footer{padding:22px 20px 30px;}
+  .logo-holder--sm .logo{width:104px;}
+}
+
+/* máy nhỏ hơn nữa (SE, màn hình chia đôi): bỏ luôn dòng "cuộn xuống" lấy chỗ */
+@media(max-width:700px) and (max-height:700px){
+  .logo{width:min(132px, 36vw);}
+  .scroll-cue{display:none;}
+}
+
+/* laptop màn thấp: logo ăn theo chiều cao cửa sổ */
+@media(min-width:701px) and (max-height:820px){
+  .logo{width:min(330px, 30vh);}
+}
+
 @media(max-width:480px){
-  section{padding:56px 16px;}
+  section{padding:28px 16px;}
   .corner-flourish{width:70px; height:70px;}
 }

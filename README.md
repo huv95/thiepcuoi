@@ -1,61 +1,66 @@
 # humiwedding.online — thiệp cưới Phi Hùng & Bích Ngọc
 
-Site tĩnh trên GitHub Pages. Ba trang, một bộ giao diện dùng chung.
+Site tĩnh trên GitHub Pages. **Một thiệp duy nhất, do cô dâu chú rể đứng tên**, gói gọn trong 3 trang cuộn dọc — mỗi trang vừa đúng một màn hình.
 
 ## Cấu trúc
 
 ```
-index.html          bản chung — cả hai tiệc
-nhatrai/index.html  chỉ tiệc Hạ Long 15/10
-nhagai/index.html   Lễ Vu Quy + tiệc Hà Nội 01/10
+index.html          toàn bộ nội dung thiệp (window.SITE) + thẻ meta
 
 assets/invite.css   toàn bộ giao diện (1 bản duy nhất)
-assets/invite.js    engine: render, đếm ngược, lịch, .ics, RSVP
+assets/invite.js    engine: render 3 trang, tự co cho vừa màn hình, đếm ngược, .ics, RSVP
 assets/photo.jpg    ảnh cưới (trước đây nhúng base64 trong index.html)
 
 apps-script/        code + hướng dẫn dựng RSVP
-_archive/           3 file HTML cũ, giữ để đối chiếu
+_archive/           bản HTML cũ (kể cả 2 thiệp nhà trai / nhà gái), giữ để đối chiếu
 ```
 
-Mỗi trang HTML **chỉ chứa nội dung của riêng nó** trong `window.SITE` + thẻ meta. Không có CSS hay JS nào nằm trong file trang. Sửa giao diện → sửa `assets/`. Sửa ngày giờ, địa chỉ, tên → sửa `window.SITE` của trang tương ứng.
+`index.html` **chỉ chứa nội dung** trong `window.SITE` + thẻ meta. Không có CSS hay JS nào nằm trong file trang. Sửa giao diện → sửa `assets/`. Sửa ngày giờ, địa chỉ, tên → sửa `window.SITE`.
+
+## Ba trang
+
+| Trang | Nội dung |
+|---|---|
+| 1 | Lời mời — logo, tên khách, tên cô dâu chú rể, **đủ giờ + ngày + địa điểm của cả hai buổi tiệc** |
+| 2 | Ảnh cưới |
+| 3 | Đếm ngược cả hai tiệc, nút bản đồ + thêm vào lịch cho từng tiệc, lời cảm ơn |
+
+Thứ tự các trang nằm ở giữa `assets/invite.js` (`page(1, …)` … `page(3, …)`). Muốn đổi trang nào chứa mục nào thì sửa đúng chỗ đó, không cần đụng vào các hàm dựng section.
+
+Ngày giờ và địa chỉ đầy đủ **chỉ nằm ở `hero.schedule`** (trang 1). `SITE.events` giờ chỉ còn nhãn đếm ngược, mốc thời gian cho .ics và câu tìm đường cho Google Maps.
+
+Giọng văn là lời của **hai bạn**, không phải lời của bố mẹ: "Tới dự lễ thành hôn của hai chúng tôi".
+
+### Mỗi trang tự vừa một màn hình
+
+Không đặt breakpoint riêng cho từng đời máy. `assets/invite.js` (hàm `fitPages`) đo chiều cao thật của khung nhìn — `visualViewport.height`, tức đã trừ thanh công cụ Safari/Chrome — rồi trang nào cao hơn thì thu khối `.page-inner` của trang đó lại đúng bằng tỉ lệ còn thiếu (`zoom`, sàn 0.62). Trang nào vừa sẵn thì không đụng gì.
+
+Đo lại khi: font tải xong, `load` (ảnh cưới xong mới biết chiều cao thật), xoay ngang, đổi cỡ cửa sổ. Đã kiểm bằng Edge ở 393×700, 393×852 và 375×560 — cả ba trang đều trọn trong một màn hình, kể cả khi có thêm dòng tên khách từ `?ten=`.
+
+Hoa văn góc và dòng "Cuộn xuống" nằm **ngoài** `.page-inner` để không bị `zoom` kéo lệch.
+
+CSS vẫn giữ một mốc `@media(max-width:700px)` để bố cục điện thoại gọn sẵn — `fitPages` chỉ là lớp bảo hiểm cho phần còn thiếu.
 
 ## Gửi link cho khách
 
-| Khách | Link |
-|---|---|
-| Bên nhà trai | `https://humiwedding.online/nhatrai/` |
-| Bên nhà gái | `https://humiwedding.online/nhagai/` |
-| Họ hàng đi cả hai / không rõ | `https://humiwedding.online/` |
+Chỉ còn một link duy nhất: `https://humiwedding.online/`
 
 ### Cá nhân hoá tên khách
 
 Thêm `?ten=` vào cuối link, tên sẽ hiện ngay dưới dòng "Trân trọng kính mời":
 
 ```
-https://humiwedding.online/nhatrai/?ten=Bác Nam & gia đình
-https://humiwedding.online/nhagai/?ten=Chị Hương
+https://humiwedding.online/?ten=Bác Nam & gia đình
+https://humiwedding.online/?ten=Chị Hương
 ```
 
 Dán thẳng vào Zalo được — Zalo tự encode khoảng trắng và dấu tiếng Việt. Nếu cần link sạch thì encode trước:
 
 ```bash
-python3 -c "import urllib.parse,sys; print('https://humiwedding.online/nhatrai/?ten='+urllib.parse.quote(sys.argv[1]))" "Bác Nam & gia đình"
+python3 -c "import urllib.parse,sys; print('https://humiwedding.online/?ten='+urllib.parse.quote(sys.argv[1]))" "Bác Nam & gia đình"
 ```
 
 Không có `?ten=` thì phần tên đơn giản là không hiện — link trần vẫn dùng bình thường.
-
-## Khác nhau giữa hai bản
-
-|  | `/nhatrai/` | `/nhagai/` |
-|---|---|---|
-| Tên lễ | Lễ Thành Hôn | Lễ Vu Quy |
-| Thứ tự tên | Phi Hùng & Bích Ngọc | Bích Ngọc & Phi Hùng |
-| Thứ tự gia đình | Nhà Trai trước | Nhà Gái trước |
-| Số sự kiện | 1 (tiệc 11:00) | 2 (Vu Quy 08:00 + tiệc 11:00) |
-| Ngày tô đậm trên lịch | 15 | 01 |
-| Cột "Bên" trong sheet RSVP | Nhà trai | Nhà gái |
-
-Theo lệ thiệp cưới truyền thống: bên nào để tên con mình trước và ghi tên lễ của bên mình.
 
 ## Logo
 
@@ -81,19 +86,21 @@ Màu có `fill` sẵn trong SVG nên không phụ thuộc CSS, nhưng vẫn cho 
 
 Chỉnh cỡ: sửa `width` của `.logo` (hero) và `.logo-holder--sm .logo` (footer) trong CSS.
 
-Logo là **nhãn hiệu cố định — luôn là HN trên cả 3 trang**. Quy ước để tên cô dâu trước ở bản nhà gái vẫn được áp dụng, nhưng ở phần tên đôi và thứ tự hai gia đình, không phải ở logo.
+Logo là **nhãn hiệu cố định — luôn là HN**.
 
 Ảnh gốc `humiwedding_logo.png` nằm trong `_archive/`, chỉ để đối chiếu, không được xuất bản.
 
 ## RSVP
 
-Chưa bật. Mục xác nhận tham dự **tự ẩn** cho tới khi dán URL Apps Script vào cả 3 file — xem [apps-script/README.md](apps-script/README.md).
+Chưa bật. Mục xác nhận tham dự nằm cuối trang 3 và **tự ẩn** cho tới khi dán URL Apps Script vào `SITE.rsvp.url` — xem [apps-script/README.md](apps-script/README.md).
+
+Lưu ý: bật RSVP lên thì trang 3 dài thêm một cái form, `fitPages` sẽ co trang đó nhỏ lại kha khá. Lúc ấy nên tách RSVP thành trang 4 riêng.
 
 ## Kiểm tra trước khi đẩy lên
 
 ```bash
 python3 -m http.server 8899
-# mở http://127.0.0.1:8899/nhatrai/?ten=Bác Nam
+# mở http://127.0.0.1:8899/?ten=Bác Nam
 ```
 
 ## Ghi chú
@@ -101,4 +108,4 @@ python3 -m http.server 8899
 - Đường dẫn trong HTML là tuyệt đối (`/assets/...`), chạy đúng vì site nằm ở gốc tên miền riêng. Nếu sau này chuyển sang `user.github.io/repo/` thì phải đổi thành tương đối.
 - `og:image` đang dùng chính ảnh cưới, tỉ lệ dọc 1400×2100. Zalo và Facebook sẽ cắt bớt hai đầu. Muốn preview đẹp hơn thì làm thêm một ảnh 1200×630 rồi trỏ `og:image` vào đó.
 - `_archive/` không được GitHub Pages xuất bản (Jekyll bỏ qua thư mục bắt đầu bằng `_`). Chắc chắn hơn thì đừng commit thư mục này.
-- Các link cũ `humiwedding.online/thiepcuoi-nhatrai.html` và `thiepcuoi-nhagai.html` **đã chết**. Hai file đó chưa từng được commit nên chưa ai nhận được link — nhưng nếu đã lỡ gửi cho ai thì cần báo lại.
+- Các link cũ `humiwedding.online/nhatrai/`, `humiwedding.online/nhagai/`, `thiepcuoi-nhatrai.html`, `thiepcuoi-nhagai.html` **đã chết**. Nếu đã lỡ gửi cho ai thì gửi lại link gốc `https://humiwedding.online/`.
