@@ -47,6 +47,9 @@
     return t.content.firstElementChild;
   }
 
+  /* Trái tim đặc, đối xứng qua trục giữa — dùng giữa tên cô dâu chú rể. */
+  var HEART_SOLID = '<svg viewBox="0 0 24 22" fill="currentColor"><path d="M12 20.4C12 20.4 2.5 13.9 2.5 7.9 2.5 4.6 5 2.2 8.1 2.2c1.8 0 3.2.9 3.9 2.1.7-1.2 2.1-2.1 3.9-2.1 3.1 0 5.6 2.4 5.6 5.7 0 6-9.5 12.5-9.5 12.5z"/></svg>';
+
   var HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 21s-7-4.35-9.5-8.8C.7 8.6 2.3 5 6 5c2 0 3.4 1.1 4 2.2C10.6 6.1 12 5 14 5c3.7 0 5.3 3.6 3.5 7.2C19 16.65 12 21 12 21z"/></svg>';
   var FLOURISH = '<svg class="corner-flourish {POS}" viewBox="0 0 100 100" fill="none" stroke="#b5895a" stroke-width="1"><path d="M5 5 C 30 5, 20 40, 45 35 C 30 45, 15 60, 5 70"/><circle cx="30" cy="22" r="3"/><circle cx="12" cy="55" r="2.5"/></svg>';
   var DIVIDER = '<div class="divider fade-up"><span class="line"></span>' + HEART + '<span class="line"></span></div>';
@@ -105,7 +108,7 @@
       '<div class="invite-line fade-up in">' + esc(h.inviteLine) + '</div>' +
       '<h1 class="couple-names fade-up in">' +
         '<span class="nm">' + esc(h.names[0]) + '</span>' +
-        '<span class="amp">&amp;</span>' +
+        '<span class="amp" aria-hidden="true">' + HEART_SOLID + '</span>' +
         '<span class="nm">' + esc(h.names[1]) + '</span>' +
       '</h1>' +
       when +
