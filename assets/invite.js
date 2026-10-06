@@ -252,6 +252,28 @@
     '</section>';
   }
 
+  function giftHTML(){
+    var g = S.gift;
+    if(!g || !g.accounts || !g.accounts.length) return '';
+    var cards = g.accounts.map(function(a){
+      return '' +
+      '<figure class="gift-card fade-up">' +
+        '<figcaption class="gift-who"><span class="gift-role">' + esc(a.role) + '</span>' +
+          '<span class="script gift-name">' + esc(a.name) + '</span></figcaption>' +
+        '<img class="gift-qr" src="' + esc(a.img) + '" alt="Mã QR chuyển khoản ' + esc(a.bank) + ' của ' + esc(a.role.toLowerCase()) + ' ' + esc(a.name) + '" loading="lazy" decoding="async" width="340" height="530">' +
+        '<div class="gift-acc">' + esc(a.bank) + '<b>' + esc(a.number) + '</b></div>' +
+        '<button class="btn btn--sm gift-copy" type="button" data-copy="' + esc(a.number) + '">Sao chép</button>' +
+      '</figure>';
+    }).join('');
+
+    return '' +
+    '<section id="gift">' +
+      '<h2 class="script section-title fade-up">' + esc(g.heading || 'Hộp mừng cưới') + '</h2>' +
+      (g.note ? '<p class="gift-note fade-up">' + esc(g.note) + '</p>' : '') +
+      '<div class="gift-grid">' + cards + '</div>' +
+    '</section>';
+  }
+
   function footerHTML(){
     var links = (S.footerLinks || []).map(function(l){
       return '<a href="' + esc(l.href) + '">' + esc(l.text) + '</a>';
@@ -267,10 +289,11 @@
 
   /* ---------- render ---------- */
 
-  /* Thiệp gói trong đúng 3 trang, mỗi trang vừa đúng một màn hình:
+  /* Thiệp gói trong 4 trang, mỗi trang vừa đúng một màn hình:
        1 · lời mời + đủ ngày giờ địa điểm
        2 · ảnh cưới
        3 · đếm ngược, bản đồ, lời cảm ơn
+       4 · mừng cưới online (QR cô dâu, chú rể)
      Mỗi trang có một .page-inner để đo chiều cao và co lại cho vừa (xem fitPages). */
   function page(n, html, chrome){
     return '<div class="page page--' + n + '">' +
@@ -285,8 +308,32 @@
       FLOURISH.replace('{POS}','tl') + FLOURISH.replace('{POS}','tr') +
       '<div class="scroll-cue">Cuộn xuống ↓</div>'),
     page(2, photoHTML()),
-    page(3, countdownHTML() + rsvpHTML() + messageHTML() + footerHTML())
+    page(3, countdownHTML() + rsvpHTML() + messageHTML() + (S.gift ? '' : footerHTML())),
+    S.gift ? page(4, giftHTML() + footerHTML()) : ''
   ].join(''));
+
+  /* ---------- nút sao chép số tài khoản ---------- */
+
+  document.querySelectorAll('.gift-copy').forEach(function(b){
+    var label = b.textContent;
+    b.addEventListener('click', function(){
+      var text = b.getAttribute('data-copy');
+      function done(ok){
+        b.textContent = ok ? 'Đã chép ✓' : text;
+        setTimeout(function(){ b.textContent = label; }, 2000);
+      }
+      if(navigator.clipboard && window.isSecureContext){
+        navigator.clipboard.writeText(text).then(function(){ done(true); }, function(){ done(false); });
+      } else {
+        var t = document.createElement('textarea');
+        t.value = text; t.setAttribute('readonly', ''); t.style.position = 'fixed'; t.style.opacity = '0';
+        document.body.appendChild(t); t.select();
+        var ok = false; try { ok = document.execCommand('copy'); } catch(e){}
+        document.body.removeChild(t);
+        done(ok);
+      }
+    });
+  });
 
   /* ---------- hiệu ứng fade-up ---------- */
 
